@@ -2,7 +2,7 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Bookmark, BookmarkCheck } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { BriefingPanel, reportsToContext } from "@/components/briefing-panel";
+import { BriefingPanel } from "@/components/briefing-panel";
 import { PriceChart } from "@/components/price-chart";
 import { ReportList } from "@/components/report-list";
 import { Badge } from "@/components/ui/badge";
@@ -11,7 +11,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Skeleton } from "@/components/ui/skeleton";
 import { getQuoteDetail, getReports } from "@/lib/finance/api";
 import { SECTORS, displayName } from "@/lib/finance/catalog";
-import { formatCompact, formatNumber, formatPercent, formatPrice, signedClass } from "@/lib/finance/format";
+import {
+  formatCompact,
+  formatNumber,
+  formatPercent,
+  formatPrice,
+  signedClass,
+} from "@/lib/finance/format";
 import { useWatchlist } from "@/lib/watchlist";
 import { cn } from "@/lib/utils";
 
@@ -65,12 +71,16 @@ function CompanyPage() {
               <p className="text-xs tracking-wide text-muted-foreground">
                 {quote.data.exchange ?? "EQUITY"} · {symbol}
               </p>
-              <h1 className="mt-1 font-display text-3xl font-medium tracking-tight sm:text-4xl">{name}</h1>
+              <h1 className="mt-1 font-display text-3xl font-medium tracking-tight sm:text-4xl">
+                {name}
+              </h1>
               <div className="mt-3 flex flex-wrap items-end gap-3">
                 <p className="font-display text-3xl tabular-nums">
                   {formatPrice(quote.data.price, quote.data.currency)}
                 </p>
-                <p className={cn("pb-1 text-lg tabular-nums", signedClass(quote.data.changePercent))}>
+                <p
+                  className={cn("pb-1 text-lg tabular-nums", signedClass(quote.data.changePercent))}
+                >
                   {formatPercent(quote.data.changePercent)}
                 </p>
               </div>
@@ -119,20 +129,7 @@ function CompanyPage() {
             <Stat label="거래량" value={formatCompact(quote.data.volume)} />
           </div>
 
-          <BriefingPanel
-            title={`${name} (${symbol})`}
-            cacheKey={`co:${symbol}:${new Date().toISOString().slice(0, 10)}`}
-            contextParts={() => {
-              const q = quote.data;
-              if (!q) return "";
-              return [
-                `가격 ${q.price} ${q.currency}, 등락 ${q.changePercent.toFixed(2)}%`,
-                `52주 ${q.fiftyTwoWeekLow}–${q.fiftyTwoWeekHigh}, 거래량 ${q.volume ?? "n/a"}`,
-                "헤드라인:",
-                reportsToContext(reports.data ?? []),
-              ].join("\n");
-            }}
-          />
+          <BriefingPanel target={{ kind: "company", symbol }} />
 
           <Card>
             <CardHeader>

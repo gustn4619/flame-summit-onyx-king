@@ -2,7 +2,7 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, Bookmark } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { BriefingPanel, reportsToContext } from "@/components/briefing-panel";
+import { BriefingPanel } from "@/components/briefing-panel";
 import { QuoteRow } from "@/components/quote-row";
 import { ReportList } from "@/components/report-list";
 import { SearchBar } from "@/components/search-bar";
@@ -34,14 +34,17 @@ function Home() {
   return (
     <AppShell>
       <section className="max-w-3xl">
-        <p className="text-xs font-medium tracking-[0.18em] text-steel uppercase">Equity research desk</p>
+        <p className="text-xs font-medium tracking-[0.18em] text-steel uppercase">
+          Equity research desk
+        </p>
         <h1 className="mt-2 font-display text-4xl leading-tight font-medium tracking-tight sm:text-5xl">
           리포트를 모으고,
           <br />
           기업과 섹터를 한눈에.
         </h1>
         <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground">
-          시세, 뉴스, 공시성 헤드라인을 모아 요약합니다. 종목명이나 섹터를 검색해 브리핑을 열어보세요.
+          시세, 뉴스, 공시성 헤드라인을 모아 요약합니다. 종목명이나 섹터를 검색해 브리핑을
+          열어보세요.
         </p>
         <div className="mt-6">
           <SearchBar autoFocus />
@@ -51,16 +54,27 @@ function Home() {
       <section className="mt-8 -mx-4 overflow-x-auto px-4">
         <div className="flex min-w-max gap-3">
           {(tape.data ?? []).length === 0 && tape.isLoading
-            ? Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-20 w-40 rounded-xl" />)
+            ? Array.from({ length: 6 }).map((_, i) => (
+                <Skeleton key={i} className="h-20 w-40 rounded-xl" />
+              ))
             : (tape.data ?? []).map((q) => (
-                <div key={q.symbol} className="w-40 rounded-xl bg-card px-3.5 py-3 shadow-[var(--shadow-border)]">
+                <div
+                  key={q.symbol}
+                  className="w-40 rounded-xl bg-card px-3.5 py-3 shadow-[var(--shadow-border)]"
+                >
                   <p className="text-xs text-muted-foreground">{q.name}</p>
-                  <p className="mt-1 font-medium tabular-nums">{formatPrice(q.price, q.currency)}</p>
+                  <p className="mt-1 font-medium tabular-nums">
+                    {formatPrice(q.price, q.currency)}
+                  </p>
                   <div className="mt-1 flex items-center justify-between">
                     <span className={cn("text-xs tabular-nums", signedClass(q.changePercent))}>
                       {formatPercent(q.changePercent)}
                     </span>
-                    <Sparkline values={q.spark} positive={q.changePercent >= 0} className="h-5 w-12" />
+                    <Sparkline
+                      values={q.spark}
+                      positive={q.changePercent >= 0}
+                      className="h-5 w-12"
+                    />
                   </div>
                 </div>
               ))}
@@ -77,13 +91,17 @@ function Home() {
           >
             <div className="flex items-start justify-between gap-2">
               <p className="font-medium">{s.name}</p>
-              <Badge variant={s.changePercent >= 0 ? "up" : "down"}>{formatPercent(s.changePercent)}</Badge>
+              <Badge variant={s.changePercent >= 0 ? "up" : "down"}>
+                {formatPercent(s.changePercent)}
+              </Badge>
             </div>
             <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{s.blurb}</p>
           </Link>
         ))}
         {sectors.isLoading
-          ? Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-24 rounded-xl" />)
+          ? Array.from({ length: 5 }).map((_, i) => (
+              <Skeleton key={i} className="h-24 rounded-xl" />
+            ))
           : null}
       </section>
 
@@ -146,19 +164,7 @@ function Home() {
       </section>
 
       <section className="mt-6">
-        <BriefingPanel
-          title="국내외 증시"
-          cacheKey={`market:${new Date().toISOString().slice(0, 10)}`}
-          contextParts={() => {
-            const tapeLines = (tape.data ?? [])
-              .map((q) => `${q.name} ${q.price} (${q.changePercent.toFixed(2)}%)`)
-              .join(", ");
-            const sectorLines = (sectors.data ?? [])
-              .map((s) => `${s.name} ${s.changePercent.toFixed(2)}%`)
-              .join(", ");
-            return `지수: ${tapeLines}\n섹터: ${sectorLines}\n헤드라인:\n${reportsToContext(reports.data ?? [])}`;
-          }}
-        />
+        <BriefingPanel target={{ kind: "market" }} />
       </section>
 
       <p className="mt-8 flex items-center gap-1 text-xs text-muted-foreground">
