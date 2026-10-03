@@ -1,0 +1,42 @@
+{
+  "url": "http://127.0.0.1:8081/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "마켓브리프",
+      "hasCanvas": false,
+      "bodyTextLen": 824,
+      "bodyTextHash": "acd3d0808fefdb721864bc46f8de79f9baadaa59f7ab2f60cc7b4fa95c270b5d",
+      "bodyTextPrefix": "마켓브리프 리서치 데스크 EQUITY RESEARCH DESK 리포트를 모으고, 기업과 섹터를 한눈에. 시세, 뉴스",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "마켓브리프",
+      "hasCanvas": false,
+      "bodyTextLen": 1241,
+      "bodyTextHash": "8b0bf56aa5e2a763b4f07b3abcea83b90f18f3df03c01c9ba5fa3d8270a3d4bd",
+      "bodyTextPrefix": "마켓브리프 EQUITY RESEARCH DESK 리포트를 모으고, 기업과 섹터를 한눈에. 시세, 뉴스, 공시성 헤드",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built-mobile.png"
+    }
+  },
+  "brandWarnings": [
+    "BRAND NOTE: no custom public/og.jpg — the platform will serve the og.grok.me placeholder. Custom cards are the default for games of every kind (DOM board/word games included), whimsical apps, creative tools, and brand-forward pages — only plain utilities (converters, CRUD trackers, admin dashboards) keep the placeholder. If this app is not a plain utility, finish the brand-asset pass per /workspace/.grok/skills/og/SKILL.md."
+  ],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-built.json",
+  "divergesFromBaseline": true,
+  "baselineReasons": [
+    "desktop: body text changed (1236 -> 824 chars, hash mismatch)"
+  ]
+}
