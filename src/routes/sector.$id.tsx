@@ -1,7 +1,7 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { AppShell } from "@/components/app-shell";
-import { BriefingPanel, reportsToContext } from "@/components/briefing-panel";
+import { BriefingPanel } from "@/components/briefing-panel";
 import { QuoteRow } from "@/components/quote-row";
 import { ReportList } from "@/components/report-list";
 import { Badge } from "@/components/ui/badge";
@@ -47,14 +47,20 @@ function SectorPage() {
       {sector.data ? (
         <div className="space-y-6">
           <div>
-            <p className="text-xs tracking-wide text-muted-foreground uppercase">{sector.data.nameEn}</p>
+            <p className="text-xs tracking-wide text-muted-foreground uppercase">
+              {sector.data.nameEn}
+            </p>
             <div className="mt-1 flex flex-wrap items-end gap-3">
-              <h1 className="font-display text-4xl font-medium tracking-tight">{sector.data.name}</h1>
+              <h1 className="font-display text-4xl font-medium tracking-tight">
+                {sector.data.name}
+              </h1>
               <Badge variant={sector.data.changePercent >= 0 ? "up" : "down"}>
                 평균 {formatPercent(sector.data.changePercent)}
               </Badge>
             </div>
-            <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">{sector.data.blurb}</p>
+            <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
+              {sector.data.blurb}
+            </p>
           </div>
 
           <div className="grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.2fr)]">
@@ -88,19 +94,10 @@ function SectorPage() {
             </Card>
           </div>
 
-          <BriefingPanel
-            title={`${sector.data.name} 섹터`}
-            cacheKey={`sec:${id}:${new Date().toISOString().slice(0, 10)}`}
-            contextParts={() => {
-              const s = sector.data;
-              if (!s) return "";
-              const names = s.quotes
-                .map((q) => `${q.name} ${q.changePercent.toFixed(2)}%`)
-                .join(", ");
-              return `평균 등락 ${s.changePercent.toFixed(2)}%\n구성: ${names}\n헤드라인:\n${reportsToContext(reports.data ?? [])}`;
-            }}
-          />
-          <p className="text-xs text-muted-foreground">구성 종목 평균은 시가총액 가중이 아닌 단순 평균입니다</p>
+          <BriefingPanel target={{ kind: "sector", id }} />
+          <p className="text-xs text-muted-foreground">
+            구성 종목 평균은 시가총액 가중이 아닌 단순 평균입니다
+          </p>
         </div>
       ) : null}
     </AppShell>

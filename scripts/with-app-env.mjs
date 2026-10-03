@@ -104,6 +104,13 @@ export function isMainModule(moduleUrl) {
   }
 }
 
+/** Run Vite with Node directly: Windows cannot spawn the npm .cmd shim. */
+export function childCommand(command, args) {
+  return command === "vite"
+    ? { command: process.execPath, args: [join(projectRoot(), "node_modules", "vite", "bin", "vite.js"), ...args] }
+    : { command, args };
+}
+
 function main(argv) {
   const [command, ...args] = argv;
   if (!command) {
@@ -111,7 +118,8 @@ function main(argv) {
     process.exit(2);
   }
   const env = mergeAppEnv(readAppEnv(projectRoot()), process.env);
-  const child = spawn(command, args, { stdio: "inherit", env });
+  const executable = childCommand(command, args);
+  const child = spawn(executable.command, executable.args, { stdio: "inherit", env });
   // The dev server is long-running and is stopped by signalling this wrapper.
   for (const signal of ["SIGINT", "SIGTERM", "SIGHUP"]) {
     process.on(signal, () => child.kill(signal));
